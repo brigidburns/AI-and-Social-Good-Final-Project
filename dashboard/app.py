@@ -7,6 +7,9 @@ from shiny import reactive
 from shiny.express import input, render, ui
 
 sns.set_theme(style="white")
+
+# Load dataset
+food_df = pd.read_csv(Path(__file__).parent / "final_data.csv", na_values="NA")
 df = pd.read_csv(Path(__file__).parent / "penguins.csv", na_values="NA")
 species = ["Adelie", "Gentoo", "Chinstrap"]
 
@@ -27,7 +30,6 @@ def filtered_df() -> pd.DataFrame:
     filt_df = df[df["Species"].isin(input.species())]
     filt_df = filt_df.loc[filt_df["Body Mass (g)"] > input.mass()]
     return filt_df
-
 
 with ui.layout_columns():
     with ui.value_box(theme="primary"):
@@ -51,13 +53,20 @@ with ui.layout_columns():
         def chinstrap_count():
             return count_species(filtered_df(), "Chinstrap")
 
-
 with ui.layout_columns():
     with ui.card():
         ui.card_header("Summary statistics")
 
         @render.data_frame
         def summary_statistics():
+            display_df = food_df[
+                [
+                    "Categories", 
+                    "Description", 
+                    "Potassium",
+                ]
+            ]
+            '''
             display_df = filtered_df()[
                 [
                     "Species",
@@ -67,6 +76,7 @@ with ui.layout_columns():
                     "Body Mass (g)",
                 ]
             ]
+            '''
             return render.DataGrid(display_df, filters=True)
 
     with ui.card():
