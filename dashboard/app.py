@@ -10,6 +10,7 @@ sns.set_theme(style="white")
 
 # Load dataset
 food_df = pd.read_csv(Path(__file__).parent / "final_data.csv", na_values="NA")
+person_df = pd.read_csv(Path(__file__).parent / "egperson.csv", na_values="NA")
 df = pd.read_csv(Path(__file__).parent / "penguins.csv", na_values="NA")
 species = ["Adelie", "Gentoo", "Chinstrap"]
 
@@ -78,6 +79,30 @@ with ui.layout_columns():
             ]
             '''
             return render.DataGrid(display_df, filters=True)
+
+    with ui.card():
+        ui.card_header("Person statistics")
+        
+        @render.plot
+        def person_statistics():
+            display_person_df = person_df[
+                [
+                    "name", 
+                    "date", 
+                    "nutrient",
+                    "grams",
+                ]
+            ]
+            #hard coded rn
+            nutrient = "protein"
+
+            display_person_df = display_person_df[display_person_df['nutrient'] == nutrient]
+            person_wide = display_person_df.pivot(index="date", columns="name", values="grams")
+
+            # Plot using Seaborn
+            axs = sns.lineplot(data=person_wide)
+            axs.set(xlabel='Date', ylabel='Grams of Protein', title='Protein Intake Over Time')
+            return axs
 
     with ui.card():
         ui.card_header("Penguin bills")
