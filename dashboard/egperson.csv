@@ -1,9 +1,12 @@
 name,date,nutrient,grams
 bill,3/13/2024,fat,2
+tom,3/13/2024,fat,5
 bill,3/13/2024,protein,20
 tom,3/13/2024,protein,23
 bill,3/13/2024,carbs,55
 tom,3/13/2024,carbs,67
+bill,3/14/2024,fat,15
+tom,3/14/2024,fat,14
 bill,3/14/2024,protein,15
 tom,3/14/2024,protein,31
 bill,3/14/2024,carbs,76

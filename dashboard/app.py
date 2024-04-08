@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import seaborn as sns
 
-from shiny import reactive
+from shiny import reactive, App, Inputs, Outputs, Session
 from shiny.express import input, render, ui
 
 sns.set_theme(style="white")
@@ -14,7 +14,7 @@ person_df = pd.read_csv(Path(__file__).parent / "egperson.csv", na_values="NA")
 df = pd.read_csv(Path(__file__).parent / "penguins.csv", na_values="NA")
 species = ["Adelie", "Gentoo", "Chinstrap"]
 
-ui.page_opts(fillable=True)
+#ui.page_opts(fillable=True)
 
 
 def count_species(df, species):
@@ -80,9 +80,14 @@ with ui.layout_columns():
             '''
             return render.DataGrid(display_df, filters=True)
 
+    #allow user to select a nutrient and display a graph of people's nutrient intake over time
     with ui.card():
         ui.card_header("Person statistics")
         
+        #radio button to select nutrient
+        nutrient_unique_list = pd.Series(person_df["nutrient"]).drop_duplicates().tolist()
+        ui.input_radio_buttons("nutrient", "Nutrient", nutrient_unique_list)
+
         @render.plot
         def person_statistics():
             display_person_df = person_df[
@@ -93,15 +98,15 @@ with ui.layout_columns():
                     "grams",
                 ]
             ]
-            #hard coded rn
-            nutrient = "protein"
 
+            #graph specific to chosen nutrient
+            nutrient = input.nutrient()
             display_person_df = display_person_df[display_person_df['nutrient'] == nutrient]
             person_wide = display_person_df.pivot(index="date", columns="name", values="grams")
 
             # Plot using Seaborn
             axs = sns.lineplot(data=person_wide)
-            axs.set(xlabel='Date', ylabel='Grams of Protein', title='Protein Intake Over Time')
+            axs.set(xlabel='Date', ylabel='Grams of ' + nutrient, title=nutrient + ' Intake Over Time')
             return axs
 
     with ui.card():
