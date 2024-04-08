@@ -34,25 +34,26 @@ def filtered_df() -> pd.DataFrame:
 
 with ui.layout_columns():
     with ui.value_box(theme="primary"):
-        "Adelie"
+        "About"
 
         @render.text
         def adelie_count():
-            return count_species(filtered_df(), "Adelie")
+            return "This is our AI and Society final project dashboard."
 
     with ui.value_box(theme="primary"):
-        "Gentoo"
+        "Value"
 
         @render.text
         def gentoo_count():
-            return count_species(filtered_df(), "Gentoo")
+            return "Below: an interactive data grid based on an ingredient data set, an interactive plot to depict a user's nutrients over time, and a filler example graph that changes based on the sidebar"
 
     with ui.value_box(theme="primary"):
-        "Chinstrap"
+        "Us"
 
         @render.text
         def chinstrap_count():
-            return count_species(filtered_df(), "Chinstrap")
+            return "Brigid, Anna, Andrew, Brian"
+
 
 with ui.layout_columns():
     with ui.card():
